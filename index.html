@@ -50,17 +50,14 @@
       box-sizing: border-box;
     }
 
-    /* TITULO CORREGIDO PARA MÓVIL */
     h1 { 
       margin-top: 0;
       margin-bottom: 40px; 
       text-shadow: 0 0 10px var(--neon-blue); 
-      /* clamp: mínimo 1.6em, tamaño ideal 7vw, máximo 2.8em */
       font-size: clamp(1.6em, 7vw, 2.8em); 
       letter-spacing: 2px;
       text-align: center;
       width: 100%;
-      display: block;
     }
 
     .main-wrapper {
@@ -116,13 +113,42 @@
 
     button:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
 
+    /* BARRA DE PROGRESO NEÓN */
+    .progress-container {
+      margin: 15px 0 5px 0;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      height: 12px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--neon-blue));
+      width: 0%; /* Se anima con JS */
+      transition: width 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+      box-shadow: 0 0 10px var(--neon-blue);
+    }
+
+    .xp-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85em;
+      color: #888;
+      margin-bottom: 15px;
+    }
+
     .info-card {
       margin-top: 30px; padding: 25px; border-radius: 15px;
       background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
       text-align: left;
     }
-    .info-label { color: #777; font-size: 0.85em; text-transform: uppercase; }
-    .info-value { font-size: 1.2em; margin-bottom: 15px; display: block; }
+    .info-label { color: #777; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
+    .info-value { font-size: 1.2em; margin-bottom: 10px; display: block; }
+    
     .benefit-box {
       background: rgba(0, 255, 0, 0.05); border: 1px dashed var(--accent);
       padding: 15px; margin-top: 15px; border-radius: 8px; color: #dfd;
@@ -135,13 +161,10 @@
     .top-1 { border: 1px solid var(--gold); background: rgba(255, 215, 0, 0.15); }
     .pts-value { color: var(--accent); font-weight: bold; }
 
-    /* MEDIA QUERIES PARA MÓVIL */
     @media (max-width: 768px) {
       .content-wrapper { padding: 20px 10px; }
-      h1 { margin-bottom: 25px; }
       .main-wrapper { flex-direction: column; align-items: center; gap: 20px; }
-      .search-section, .ranking-section { width: 100%; max-width: 400px; min-width: unset; }
-      .box { padding: 20px; }
+      .search-section, .ranking-section { width: 100%; max-width: 400px; }
     }
   </style>
 </head>
@@ -162,7 +185,7 @@
       </div>
 
       <div class="box ranking-section">
-        <h2 style="color: var(--gold); text-align: center;">🏆 Salon de la fama</h2>
+        <h2 style="color: var(--gold); text-align: center;">🏆 Hall of Fame</h2>
         <div id="lista-ranking" style="color: #ccc; text-align: center;">Cargando sistema...</div>
       </div>
     </div>
@@ -174,8 +197,9 @@
       "particles": {
         "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
         "color": { "value": "#00d4ff" },
+        "shape": { "type": "circle" },
         "opacity": { "value": 0.3 },
-        "size": { "value": 2 },
+        "size": { "value": 2, "random": true },
         "line_linked": { "enable": true, "distance": 150, "color": "#00d4ff", "opacity": 0.2, "width": 1 },
         "move": { "enable": true, "speed": 2 }
       },
@@ -185,28 +209,43 @@
   </script>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7hsUBTUKHYXVsuNvhFbdhemEBYIzKxzgH4ZKtUD_3t0nmRtKgafHU0ZB3ZMQnmX8s/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDaVpwSMzYagMjrUhyeOLtR4aG_vLKMzX41CgICFCGiO2aigwK7aUerN4LDvXs0BAn/exec";
 
     function buscarPuntos() {
       const nombre = document.getElementById("nombreInput").value.trim();
       const resDiv = document.getElementById("resultado");
       if (!nombre) return;
-      resDiv.innerHTML = "<p style='color: var(--neon-blue)'>⏳ Accediendo...</p>";
+      
+      resDiv.innerHTML = "<p style='color: var(--neon-blue)'>⏳ Sincronizando datos...</p>";
+      
       fetch(SCRIPT_URL + "?nombre=" + encodeURIComponent(nombre))
       .then(r => r.json())
       .then(data => {
         if (data.error) {
           resDiv.innerHTML = `<p style="color: #ff4444; margin-top:20px;">❌ ${data.error}</p>`;
         } else {
+          // Lógica de porcentaje basada en tus rangos (0-200, 200-600, 600-800)
+          const progreso = data.puntos >= 800 ? 100 : ((data.puntos - data.xpMin) / (data.xpMax - data.xpMin)) * 100;
+          const porcentaje = Math.min(Math.max(progreso, 0), 100);
+
           resDiv.innerHTML = `
             <div class="info-card">
-              <span class="info-label">Player</span>
+              <span class="info-label">Agente</span>
               <span class="info-value"><strong>${data.nombre.toUpperCase()}</strong></span>
-              <span class="info-label">Puntos</span>
-              <span class="info-value" style="color:var(--accent); text-shadow: 0 0 10px var(--accent)">${Number(data.puntos).toLocaleString()} XP</span>
-              <span class="info-label">Nivel</span>
+              
+              <span class="info-label">Rango</span>
               <span class="info-value" style="color:var(--gold)">⚡ ${data.nivel}</span>
-              <span class="info-label">Beneficios Desbloqueados</span>
+
+              <span class="info-label">Progreso del Nivel</span>
+              <div class="progress-container">
+                <div class="progress-bar" style="width: ${porcentaje}%"></div>
+              </div>
+              <div class="xp-info">
+                <span>${Number(data.puntos).toLocaleString()} XP</span>
+                <span>${data.puntos >= 800 ? '¡Nivel Máximo!' : 'Siguiente: ' + data.xpMax + ' XP'}</span>
+              </div>
+              
+              <span class="info-label" style="display:block; margin-top:10px;">Beneficios Desbloqueados</span>
               <div class="benefit-box">${data.beneficios}</div>
             </div>`;
         }
