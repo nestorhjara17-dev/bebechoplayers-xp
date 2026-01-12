@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XP BebechoPlayers</title>
+  <style>
+    :root {
+      --primary: #007bff;
+      --gold: #ffd700;
+      --bg: #0a0a0a;
+      --card: rgba(20, 20, 20, 0.9);
+      --text: #fff;
+      --accent: #00ff00;
+      --neon-blue: #00d4ff;
+      --neon-glow: 0 0 15px rgba(0, 212, 255, 0.5);
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Fondo de partículas */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+      padding: 40px 20px;
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 { 
+      margin-bottom: 40px; 
+      text-shadow: 0 0 10px var(--neon-blue); 
+      font-size: 2.8em; 
+      letter-spacing: 2px;
+    }
+
+    .main-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      width: 100%;
+    }
+
+    /* ESTILO NEÓN PARA LOS BOXES */
+    .box {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 20px;
+      position: relative;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 212, 255, 0.1);
+      transition: all 0.3s ease;
+      animation: neon-pulse 3s infinite ease-in-out;
+    }
+
+    @keyframes neon-pulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(0, 212, 255, 0.2), inset 0 0 5px rgba(0, 212, 255, 0.1); border-color: rgba(0, 212, 255, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(0, 212, 255, 0.5), inset 0 0 15px rgba(0, 212, 255, 0.2); border-color: rgba(0, 212, 255, 0.8); }
+    }
+
+    .search-section { flex: 2; min-width: 320px; text-align: center; }
+    .ranking-section { flex: 1; min-width: 280px; }
+
+    /* Estilo neón específico para el ranking */
+    .ranking-section {
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      animation: neon-pulse-gold 3.5s infinite ease-in-out;
+    }
+
+    @keyframes neon-pulse-gold {
+      0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); border-color: rgba(255, 215, 0, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.4); border-color: rgba(255, 215, 0, 0.7); }
+    }
+
+    input {
+      padding: 15px; width: 85%; max-width: 350px; border-radius: 10px; border: 1px solid #444;
+      font-size: 16px; margin-bottom: 20px; background: rgba(0,0,0,0.5); color: white;
+      outline: none; transition: 0.3s;
+    }
+    input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
+
+    button {
+      padding: 15px 35px; background: transparent; color: var(--neon-blue); border: 2px solid var(--neon-blue);
+      border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; 
+      text-transform: uppercase; transition: 0.3s;
+      box-shadow: 0 0 5px var(--neon-blue);
+    }
+
+    button:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
+
+    /* Tarjeta de información del cliente */
+    .info-card {
+      margin-top: 30px;
+      padding: 25px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: left;
+    }
+    .info-label { color: #777; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
+    .info-value { font-size: 1.2em; margin-bottom: 15px; display: block; }
+    .benefit-box {
+      background: rgba(0, 255, 0, 0.05);
+      border: 1px dashed var(--accent);
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 8px;
+      color: #dfd;
+    }
+
+    .rank-item {
+      display: flex; justify-content: space-between; padding: 15px;
+      margin: 12px 0; background: rgba(255,255,255,0.05); border-radius: 12px;
+    }
+    .top-1 { border: 1px solid var(--gold); background: rgba(255, 215, 0, 0.15); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+    .pts-value { color: var(--accent); font-weight: bold; text-shadow: 0 0 5px var(--accent); }
+
+    @media (max-width: 768px) {
+      .main-wrapper { flex-direction: column; align-items: center; }
+      .search-section, .ranking-section { width: 95%; }
+    }
+  </style>
+</head>
+<body onload="obtenerRanking()">
+
+  <div id="particles-js"></div> 
+
+  <div class="content-wrapper"> 
+    <h1>🎮 XP BEBECHOPLAYERS</h1>
+
+    <div class="main-wrapper">
+      
+      <div class="box search-section">
+        <h2 style="color: var(--neon-blue)">Panel de Usuario</h2>
+        <input id="nombreInput" type="text" placeholder="Escribe tu nombre..." onkeypress="if(event.key === 'Enter') buscarPuntos()">
+        <br>
+        <button onclick="buscarPuntos()">Escanear XP</button>
+        
+        <div id="resultado"></div>
+      </div>
+
+      <div class="box ranking-section">
+        <h2 style="color: var(--gold); text-align: center;">🏆 Salon de la Fama</h2>
+        <div id="lista-ranking" style="color: #ccc; text-align: center; padding: 10px;">Cargando sistema...</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS('particles-js', {
+      "particles": {
+        "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+        "color": { "value": "#00d4ff" },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.3 },
+        "size": { "value": 2, "random": true },
+        "line_linked": { "enable": true, "distance": 150, "color": "#00d4ff", "opacity": 0.2, "width": 1 },
+        "move": { "enable": true, "speed": 2 }
+      },
+      "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } },
+      "retina_detect": true
+    });
+  </script>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyM1b3Y4M1N1vrVJTJUSsShnbWnZlBkcU7NQ1c3Wha7SqzMbFr09ueh-HOldpZaV7kc/exec";
+
+    function buscarPuntos() {
+      const nombre = document.getElementById("nombreInput").value.trim();
+      const resDiv = document.getElementById("resultado");
+      if (!nombre) return;
+
+      resDiv.innerHTML = "<p style='color: var(--neon-blue)'>⏳ Accediendo a la base de datos...</p>";
+
+      fetch(SCRIPT_URL + "?nombre=" + encodeURIComponent(nombre))
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) {
+          resDiv.innerHTML = `<p style="color: #ff4444; margin-top:20px;">❌ ${data.error}</p>`;
+        } else {
+          resDiv.innerHTML = `
+            <div class="info-card">
+              <span class="info-label">Player</span>
+              <span class="info-value"><strong>${data.nombre.toUpperCase()}</strong></span>
+              
+              <span class="info-label">Puntos</span>
+              <span class="info-value" style="color:var(--accent); text-shadow: 0 0 10px var(--accent)">${Number(data.puntos).toLocaleString()} XP</span>
+              
+              <span class="info-label">Nivel</span>
+              <span class="info-value" style="color:var(--gold)">⚡ ${data.nivel}</span>
+              
+              <span class="info-label">Beneficios Desbloqueados</span>
+              <div class="benefit-box">${data.beneficios}</div>
+            </div>`;
+        }
+      })
+      .catch(() => resDiv.innerHTML = "🚫 Error de enlace");
+    }
+
+    function obtenerRanking() {
+      const rankDiv = document.getElementById("lista-ranking");
+      fetch(SCRIPT_URL)
+        .then(r => r.json())
+        .then(data => {
+          if (data.ranking) {
+            rankDiv.innerHTML = "";
+            data.ranking.forEach((jugador, i) => {
+              const isFirst = i === 0 ? 'top-1' : '';
+              rankDiv.innerHTML += `
+                <div class="rank-item ${isFirst}">
+                  <span>#${i+1} ${jugador.nombre}</span>
+                  <span class="pts-value">${Number(jugador.puntos).toLocaleString()}</span>
+                </div>`;
+            });
+          }
+        });
+    }
+  </script>
+</body>
+</html>
