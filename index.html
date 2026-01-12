@@ -13,7 +13,6 @@
       --text: #fff;
       --accent: #00ff00;
       --neon-blue: #00d4ff;
-      --neon-glow: 0 0 15px rgba(0, 212, 255, 0.5);
     }
 
     body {
@@ -30,7 +29,6 @@
       overflow-x: hidden;
     }
 
-    /* Fondo de partículas */
     #particles-js {
       position: fixed;
       width: 100%;
@@ -49,50 +47,51 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-sizing: border-box;
     }
 
-    h/* 1. Modifica el estilo del H1 para que sea flexible */
+    /* TITULO CORREGIDO PARA MÓVIL */
     h1 { 
-      margin-bottom: 30px; 
+      margin-top: 0;
+      margin-bottom: 40px; 
       text-shadow: 0 0 10px var(--neon-blue); 
-      font-size: clamp(1.8em, 8vw, 2.8em); /* Esto hace que el tamaño se adapte solo */
+      /* clamp: mínimo 1.6em, tamaño ideal 7vw, máximo 2.8em */
+      font-size: clamp(1.6em, 7vw, 2.8em); 
       letter-spacing: 2px;
       text-align: center;
       width: 100%;
-      white-space: normal; /* Permite que baje, pero lo controlaremos con el tamaño */
+      display: block;
     }
 
     .main-wrapper {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 40px;
+      gap: 30px;
       width: 100%;
     }
 
-    /* ESTILO NEÓN PARA LOS BOXES */
     .box {
       background: var(--card);
       backdrop-filter: blur(10px);
       padding: 30px;
       border-radius: 20px;
-      position: relative;
       border: 1px solid rgba(0, 212, 255, 0.3);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 212, 255, 0.1);
       transition: all 0.3s ease;
       animation: neon-pulse 3s infinite ease-in-out;
+      box-sizing: border-box;
     }
 
     @keyframes neon-pulse {
-      0%, 100% { box-shadow: 0 0 15px rgba(0, 212, 255, 0.2), inset 0 0 5px rgba(0, 212, 255, 0.1); border-color: rgba(0, 212, 255, 0.3); }
-      50% { box-shadow: 0 0 25px rgba(0, 212, 255, 0.5), inset 0 0 15px rgba(0, 212, 255, 0.2); border-color: rgba(0, 212, 255, 0.8); }
+      0%, 100% { box-shadow: 0 0 15px rgba(0, 212, 255, 0.2); border-color: rgba(0, 212, 255, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(0, 212, 255, 0.5); border-color: rgba(0, 212, 255, 0.8); }
     }
 
     .search-section { flex: 2; min-width: 320px; text-align: center; }
-    .ranking-section { flex: 1; min-width: 280px; }
-
-    /* Estilo neón específico para el ranking */
-    .ranking-section {
+    
+    .ranking-section { 
+      flex: 1; 
+      min-width: 280px; 
       border: 1px solid rgba(255, 215, 0, 0.3);
       animation: neon-pulse-gold 3.5s infinite ease-in-out;
     }
@@ -105,9 +104,8 @@
     input {
       padding: 15px; width: 85%; max-width: 350px; border-radius: 10px; border: 1px solid #444;
       font-size: 16px; margin-bottom: 20px; background: rgba(0,0,0,0.5); color: white;
-      outline: none; transition: 0.3s;
+      outline: none;
     }
-    input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
 
     button {
       padding: 15px 35px; background: transparent; color: var(--neon-blue); border: 2px solid var(--neon-blue);
@@ -118,52 +116,32 @@
 
     button:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
 
-    /* Tarjeta de información del cliente */
     .info-card {
-      margin-top: 30px;
-      padding: 25px;
-      border-radius: 15px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 30px; padding: 25px; border-radius: 15px;
+      background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
       text-align: left;
     }
-    .info-label { color: #777; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
+    .info-label { color: #777; font-size: 0.85em; text-transform: uppercase; }
     .info-value { font-size: 1.2em; margin-bottom: 15px; display: block; }
     .benefit-box {
-      background: rgba(0, 255, 0, 0.05);
-      border: 1px dashed var(--accent);
-      padding: 15px;
-      margin-top: 15px;
-      border-radius: 8px;
-      color: #dfd;
+      background: rgba(0, 255, 0, 0.05); border: 1px dashed var(--accent);
+      padding: 15px; margin-top: 15px; border-radius: 8px; color: #dfd;
     }
 
     .rank-item {
       display: flex; justify-content: space-between; padding: 15px;
       margin: 12px 0; background: rgba(255,255,255,0.05); border-radius: 12px;
     }
-    .top-1 { border: 1px solid var(--gold); background: rgba(255, 215, 0, 0.15); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
-    .pts-value { color: var(--accent); font-weight: bold; text-shadow: 0 0 5px var(--accent); }
+    .top-1 { border: 1px solid var(--gold); background: rgba(255, 215, 0, 0.15); }
+    .pts-value { color: var(--accent); font-weight: bold; }
 
-    /* 2. Ajuste específico para pantallas pequeñas (Celulares) */
+    /* MEDIA QUERIES PARA MÓVIL */
     @media (max-width: 768px) {
-      h1 {
-        font-size: 1.8em; /* Tamaño fijo más pequeño para que no rompa la línea */
-        margin-bottom: 20px;
-        padding: 0 10px;
-      }
-      .main-wrapper { 
-        flex-direction: column; 
-        align-items: center; 
-        gap: 20px;
-      }
-      .search-section, .ranking-section { 
-        width: 100%; /* Que ocupen todo el ancho del celular */
-        max-width: 350px;
-      }
-      .content-wrapper {
-        padding: 20px 10px;
-      }
+      .content-wrapper { padding: 20px 10px; }
+      h1 { margin-bottom: 25px; }
+      .main-wrapper { flex-direction: column; align-items: center; gap: 20px; }
+      .search-section, .ranking-section { width: 100%; max-width: 400px; min-width: unset; }
+      .box { padding: 20px; }
     }
   </style>
 </head>
@@ -175,21 +153,18 @@
     <h1>🎮 XP BEBECHOPLAYERS</h1>
 
     <div class="main-wrapper">
-      
       <div class="box search-section">
         <h2 style="color: var(--neon-blue)">Panel de Usuario</h2>
-        <input id="nombreInput" type="text" placeholder="Escribe tu nombre..." onkeypress="if(event.key === 'Enter') buscarPuntos()">
+        <input id="nombreInput" type="text" placeholder="Tu nombre aquí..." onkeypress="if(event.key === 'Enter') buscarPuntos()">
         <br>
         <button onclick="buscarPuntos()">Escanear XP</button>
-        
         <div id="resultado"></div>
       </div>
 
       <div class="box ranking-section">
-        <h2 style="color: var(--gold); text-align: center;">🏆 Salon de la Fama</h2>
-        <div id="lista-ranking" style="color: #ccc; text-align: center; padding: 10px;">Cargando sistema...</div>
+        <h2 style="color: var(--gold); text-align: center;">🏆 Hall of Fame</h2>
+        <div id="lista-ranking" style="color: #ccc; text-align: center;">Cargando sistema...</div>
       </div>
-
     </div>
   </div>
 
@@ -197,11 +172,10 @@
   <script>
     particlesJS('particles-js', {
       "particles": {
-        "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+        "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
         "color": { "value": "#00d4ff" },
-        "shape": { "type": "circle" },
         "opacity": { "value": 0.3 },
-        "size": { "value": 2, "random": true },
+        "size": { "value": 2 },
         "line_linked": { "enable": true, "distance": 150, "color": "#00d4ff", "opacity": 0.2, "width": 1 },
         "move": { "enable": true, "speed": 2 }
       },
@@ -211,15 +185,13 @@
   </script>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyM1b3Y4M1N1vrVJTJUSsShnbWnZlBkcU7NQ1c3Wha7SqzMbFr09ueh-HOldpZaV7kc/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLIiZipHcUNANvMtw2kXCQjMqfw0nezjJCXTJgAX6t2P3IAzFHlmnRqC7k_GCUJSDi/exec";
 
     function buscarPuntos() {
       const nombre = document.getElementById("nombreInput").value.trim();
       const resDiv = document.getElementById("resultado");
       if (!nombre) return;
-
-      resDiv.innerHTML = "<p style='color: var(--neon-blue)'>⏳ Accediendo a la base de datos...</p>";
-
+      resDiv.innerHTML = "<p style='color: var(--neon-blue)'>⏳ Accediendo...</p>";
       fetch(SCRIPT_URL + "?nombre=" + encodeURIComponent(nombre))
       .then(r => r.json())
       .then(data => {
@@ -228,15 +200,12 @@
         } else {
           resDiv.innerHTML = `
             <div class="info-card">
-              <span class="info-label">Player</span>
+              <span class="info-label">Agente</span>
               <span class="info-value"><strong>${data.nombre.toUpperCase()}</strong></span>
-              
-              <span class="info-label">Puntos</span>
+              <span class="info-label">Poder Total</span>
               <span class="info-value" style="color:var(--accent); text-shadow: 0 0 10px var(--accent)">${Number(data.puntos).toLocaleString()} XP</span>
-              
-              <span class="info-label">Nivel</span>
+              <span class="info-label">Rango</span>
               <span class="info-value" style="color:var(--gold)">⚡ ${data.nivel}</span>
-              
               <span class="info-label">Beneficios Desbloqueados</span>
               <div class="benefit-box">${data.beneficios}</div>
             </div>`;
