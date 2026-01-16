@@ -15,7 +15,7 @@
       --accent: #39ff14; 
     }
 
-    * { box-sizing: border-box; } /* Esto evita que el padding rompa el ancho */
+    * { box-sizing: border-box; }
 
     body {
       font-family: 'Press Start 2P', cursive;
@@ -95,11 +95,10 @@
 
     .btn-detalles { margin-top: 15px; background: none; color: var(--gold); border: 1px solid var(--gold); padding: 10px; width: 100%; font-family: 'Press Start 2P', cursive; font-size: 7px; cursor: pointer; }
 
-    /* MODAL REPARADO PARA MÓVIL */
     .modal { 
       display: none; position: fixed; z-index: 1000; left: 0; top: 0; 
       width: 100%; height: 100%; background: rgba(0,0,0,0.92); backdrop-filter: blur(5px);
-      padding: 20px; /* Espacio para que no toque los bordes del cel */
+      padding: 20px;
     }
     .modal-content {
       background: var(--card); margin: 10% auto; padding: 25px; 
@@ -161,17 +160,14 @@
   <script>
     particlesJS('particles-js', {
       "particles": {
-        "number": { "value": 40 },
-        "color": { "value": "#00f2ff" },
-        "shape": { "type": "circle" },
-        "opacity": { "value": 0.2 },
-        "size": { "value": 1.2 },
+        "number": { "value": 40 }, "color": { "value": "#00f2ff" }, "shape": { "type": "circle" },
+        "opacity": { "value": 0.2 }, "size": { "value": 1.2 },
         "line_linked": { "enable": true, "distance": 100, "color": "#00f2ff", "opacity": 0.1 },
         "move": { "enable": true, "speed": 0.6 }
       }
     });
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyeW4Gk5eO7T_TLq-WSKWpnZF8XvRO2jcn3-oAUFa5jlEsMURM8IpIAm-uSuOsvtNcx/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiLwTtZnLyW-_XM7OYn4CQ_t-Un2B6CWklMR2Y1Orh_BuRDYgtrmAAqZVHP4n0_VX_/exec";
     let detalleGlobal = ""; 
 
     function buscarPuntos() {
@@ -199,17 +195,23 @@
           detalleGlobal = data.detalleExtendido;
           const progreso = data.puntos >= 800 ? 100 : ((data.puntos - data.xpMin) / (data.xpMax - data.xpMin)) * 100;
           
+          // Lógica de color para el puesto
+          const colorPuesto = data.puesto <= 10 ? "var(--gold)" : "var(--primary)";
+
           resDiv.innerHTML = `
-             <div class="info-card">
+            <div class="info-card">
               <span class="info-label">USUARIO</span>
               <span class="info-value">${data.nombre.toUpperCase()}</span>
               
+              <span class="info-label">TU_PUESTO_ES_:</span>
+              <span class="info-value" style="color:${colorPuesto}; text-shadow: 0 0 10px ${colorPuesto}"># ${data.puesto}</span>
+
               <span class="info-label">NIVEL</span>
               <span class="info-value" style="color:var(--gold)">LVL: ${data.nivel}</span>
 
               <span class="info-label">XP_PROGRESS</span>
               <div class="progress-container">
-                <div class="progress-bar" style="width: ${progreso}%"></div>
+                <div class="progress-bar" id="pBar" style="width: 0%"></div>
               </div>
               <div style="display:flex; justify-content:space-between; font-size:7px; color:#555;">
                 <span>${data.puntos} XP</span>
@@ -218,7 +220,6 @@
               
               <span class="info-label" style="margin-top:10px; display:block;">BENEFICIOS</span>
               <div class="benefit-box">${data.beneficios}</div>
-              </div>
               <button class="btn-detalles" onclick="abrirModal()">[ CONSULTAR_BENEFICIOS_FULL ]</button>
             </div>`;
           
