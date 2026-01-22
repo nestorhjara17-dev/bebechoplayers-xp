@@ -127,7 +127,7 @@
   <div id="modalLobbyJuego" class="modal">
     <div class="modal-content">
       <span class="btn-cerrar" onclick="cerrarLobby()">[X]</span>
-      <h3 style="color: var(--gold); font-size: 9px; margin-bottom: 20px;">> ¡ SUMA_XP_JUGANDO !</h3>
+      <h3 style="color: var(--gold); font-size: 9px; margin-bottom: 20px;">> SELECCION_DE_NIVEL</h3>
       <p id="msgJuego" style="font-size: 7px; color: #666; margin-bottom: 20px;">IDENTIFÍCATE PARA GUARDAR TU SCORE</p>
       
       <button class="btn-viborecho" id="btnViborecho" onclick="iniciarViborecho()">[ ViborechoFood ]</button>
@@ -144,14 +144,14 @@
   </div>
 
   <audio id="sndClick" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
-  <audio id="sndSuccess" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
-  <audio id="sndModal" src="https://assets.mixkit.co/active_storage/sfx/2811/2811-preview.mp3"></audio>
+  <audio id="sndSuccess" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+  <audio id="sndModal" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS('particles-js', { "particles": { "number": { "value": 40 }, "color": { "value": "#00f2ff" }, "opacity": { "value": 0.2 }, "size": { "value": 1.2 }, "line_linked": { "enable": true, "distance": 100, "color": "#00f2ff", "opacity": 0.1 }, "move": { "enable": true, "speed": 0.6 } } });
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNPW8N39sbJxkC7uwQkhVFavymngzku2yLDsedbPuSa6-L7zFTrzR01tZxWxtRK4VO/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDAl6c1lkLQ0bk8edVBUx1_HXhs4viYcsUKks9TR-xHSl2r9PCbMJLjpY6jdekp-CS/exec";
     let detalleGlobal = ""; let catalogoCompleto = [];
     let usuarioActual = ""; // Guardamos el nombre para el juego
 
