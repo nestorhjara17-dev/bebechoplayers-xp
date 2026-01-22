@@ -1,3 +1,5 @@
+Html_juego
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,7 +8,6 @@
   <title>XP BebechoPlayers</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* ... (Todos tus estilos anteriores se mantienen intactos) ... */
     :root { --primary: #00f2ff; --gold: #ff00ff; --bg: #020b12; --card: rgba(10, 25, 40, 0.95); --text: #fff; --accent: #39ff14; }
     * { box-sizing: border-box; }
     body { font-family: 'Press Start 2P', cursive; background-color: var(--bg); color: var(--text); margin: 0; min-height: 100vh; overflow-x: hidden; font-size: 12px; display: flex; flex-direction: column; align-items: center; }
@@ -28,6 +29,10 @@
     input { padding: 15px; width: 100%; max-width: 350px; border: 2px solid var(--primary); margin-bottom: 20px; background: rgba(0,0,0,0.7); color: var(--accent); font-family: 'Press Start 2P', cursive; font-size: 10px; text-align: center; outline: none; }
     button { padding: 15px 20px; background: var(--primary); color: #000; border: 2px solid #fff; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 9px; }
     .btn-cat { background: var(--gold); width: 100%; max-width: 350px; }
+    
+    /* BOTON NUEVO JUEGO */
+    .btn-game { background: #ffae00; width: 100%; max-width: 350px; margin-top: 10px; }
+    .btn-viborecho { background: var(--accent); color: #000; font-size: 10px; padding: 20px; width: 100%; border: 2px solid #fff; }
 
     .info-card { margin-top: 25px; padding: 15px; border: 1px solid var(--primary); background: rgba(0, 242, 255, 0.05); text-align: left; }
     .info-label { color: var(--primary); font-size: 7px; margin-bottom: 5px; display: block; opacity: 0.7; }
@@ -37,8 +42,8 @@
     .benefit-box { background: rgba(57, 255, 20, 0.05); border-left: 3px solid var(--accent); padding: 10px; color: var(--accent); font-size: 7px; }
     .btn-detalles { margin-top: 10px; width: 100%; background: transparent; color: var(--primary); border: 1px solid var(--primary); padding: 8px; font-size: 7px; cursor: pointer; }
 
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); backdrop-filter: blur(5px); padding: 20px; }
-    .modal-content { background: var(--card); margin: 5% auto; padding: 25px; border: 2px solid var(--gold); width: 100%; max-width: 500px; position: relative; animation: abrirCompuerta 0.4s ease; }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); backdrop-filter: blur(5px); padding: 20px; overflow-y: auto; }
+    .modal-content { background: var(--card); margin: 5% auto; padding: 25px; border: 2px solid var(--gold); width: 100%; max-width: 500px; position: relative; animation: abrirCompuerta 0.4s ease; text-align: center; }
     @keyframes abrirCompuerta { from { transform: scaleY(0); } to { transform: scaleY(1); } }
     .btn-cerrar { position: absolute; top: 10px; right: 12px; color: var(--gold); cursor: pointer; }
 
@@ -49,6 +54,11 @@
     .prod-item { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 8px 0; font-size: 7px; align-items: center; }
     .prod-precio { color: var(--accent); white-space: nowrap; margin-left: 10px; }
     .btn-wa { background: #25D366; color: white; border: none; width: 100%; margin-top: 20px; font-size: 8px; }
+
+    /* ESTILOS DEL JUEGO */
+    #game-canvas { background: #000; border: 2px solid var(--primary); display: none; margin: 20px auto; max-width: 100%; box-shadow: 0 0 20px var(--primary); }
+    .game-controls { display: none; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 210px; margin: 20px auto; }
+    .control-btn { padding: 20px; background: rgba(0, 242, 255, 0.1); border: 1px solid var(--primary); color: var(--primary); font-family: 'Press Start 2P'; font-size: 12px; touch-action: manipulation; }
 
     .legendary-box { border: 1px double var(--gold); padding: 10px; margin-bottom: 15px; background: rgba(255, 0, 255, 0.1); }
     .rank-item { padding: 10px; margin: 8px 0; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 0, 255, 0.2); }
@@ -76,6 +86,7 @@
           <h2 style="color: var(--gold); font-size: 9px;">[ PANEL_DE_PRODUCTOS ]</h2>
           <p style="font-size: 6px; color: #666; margin-bottom: 15px;">EXPLORA EL CATALOGO DE COMIDITAS</p>
           <button class="btn-cat" onclick="abrirCatalogo()">[ ABRIR_MENU_CATALOGO ]</button>
+          <button class="btn-game" onclick="abrirLobby()">[ JUEGO_DIARIO_ARCADE ]</button>
         </div>
       </div>
 
@@ -115,6 +126,25 @@
     </div>
   </div>
 
+  <div id="modalLobbyJuego" class="modal">
+    <div class="modal-content">
+      <span class="btn-cerrar" onclick="cerrarLobby()">[X]</span>
+      <h3 style="color: var(--gold); font-size: 9px; margin-bottom: 20px;">> SELECCION_DE_NIVEL</h3>
+      <p id="msgJuego" style="font-size: 7px; color: #666; margin-bottom: 20px;">IDENTIFÍCATE PARA GUARDAR TU SCORE</p>
+      
+      <button class="btn-viborecho" id="btnViborecho" onclick="iniciarViborecho()">[ ViborechoFood ]</button>
+      
+      <canvas id="game-canvas" width="300" height="300"></canvas>
+      
+      <div class="game-controls" id="game-controls">
+        <div></div><button class="control-btn" onclick="cambiarDir('UP')">▲</button><div></div>
+        <button class="control-btn" onclick="cambiarDir('LEFT')">◀</button>
+        <button class="control-btn" onclick="cambiarDir('DOWN')">▼</button>
+        <button class="control-btn" onclick="cambiarDir('RIGHT')">▶</button>
+      </div>
+    </div>
+  </div>
+
   <audio id="sndClick" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
   <audio id="sndSuccess" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
   <audio id="sndModal" src="https://assets.mixkit.co/active_storage/sfx/2811/2811-preview.mp3"></audio>
@@ -123,8 +153,9 @@
   <script>
     particlesJS('particles-js', { "particles": { "number": { "value": 40 }, "color": { "value": "#00f2ff" }, "opacity": { "value": 0.2 }, "size": { "value": 1.2 }, "line_linked": { "enable": true, "distance": 100, "color": "#00f2ff", "opacity": 0.1 }, "move": { "enable": true, "speed": 0.6 } } });
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDAl6c1lkLQ0bk8edVBUx1_HXhs4viYcsUKks9TR-xHSl2r9PCbMJLjpY6jdekp-CS/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgK3mSseVGQG3WxEW365bT_LW-DvjjbiWFmYyk-uxpQhHY49c9UbzwpAM7Go0B875T/exec";
     let detalleGlobal = ""; let catalogoCompleto = [];
+    let usuarioActual = ""; // Guardamos el nombre para el juego
 
     function obtenerDatosIniciales() {
       fetch(SCRIPT_URL).then(r => r.json()).then(data => {
@@ -140,6 +171,7 @@
       const nom = document.getElementById("nombreInput").value.trim();
       const res = document.getElementById("resultado"); const btn = document.getElementById("btnScan");
       if (!nom) return;
+      usuarioActual = nom; // Sincronizamos con el juego
       document.getElementById("sndClick").play();
       btn.innerText = "ESCANEO...";
       fetch(SCRIPT_URL + "?nombre=" + encodeURIComponent(nom)).then(r => r.json()).then(data => {
@@ -160,29 +192,14 @@
     function filtrarCat(catBuscada, btn) {
       document.getElementById("sndClick").play();
       document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-      
       const listDiv = document.getElementById("lista-prod");
-      
-      // LOGICA DE BUSQUEDA FLEXIBLE
-      const filtered = catalogoCompleto.filter(p => {
-        const c = p.categoria.toUpperCase();
-        // Si el botón es PAPAS o PIZZAS, buscamos que la celda CONTENGA esa palabra
-        return c.includes(catBuscada);
-      });
-
-      if (filtered.length === 0) { 
-        listDiv.innerHTML = `<p style="text-align:center; font-size:7px; color:#555; margin-top:20px;">PROXIMAMENTE EN BEBECHO...</p>`; 
-        return; 
-      }
-      
-      // Agrupar por la Columna B (DETALLE)
+      const filtered = catalogoCompleto.filter(p => p.categoria.toUpperCase().includes(catBuscada));
+      if (filtered.length === 0) { listDiv.innerHTML = `<p style="text-align:center; font-size:7px; color:#555; margin-top:20px;">PROXIMAMENTE EN BEBECHO...</p>`; return; }
       const grupos = [...new Set(filtered.map(p => p.detalle))];
       let h = "";
       grupos.forEach(g => {
         h += `<div style="color:var(--gold); font-size:6px; margin: 15px 0 5px 0; border-bottom: 1px dashed var(--gold); padding-bottom:3px; letter-spacing:1px;">[ ${g} ]</div>`;
-        filtered.filter(p => p.detalle === g).forEach(p => { 
-          h += `<div class="prod-item"><span>${p.producto}</span><span class="prod-precio">${p.precio}</span></div>`; 
-        });
+        filtered.filter(p => p.detalle === g).forEach(p => { h += `<div class="prod-item"><span>${p.producto}</span><span class="prod-precio">${p.precio}</span></div>`; });
       });
       listDiv.innerHTML = h;
     }
@@ -190,7 +207,103 @@
     function irAWhatsApp() { window.open(`https://wa.me/543794000944?text=${encodeURIComponent("Hola Bebecho! Estuve viendo el catálogo en la web y quiero hacer un pedido.")}`, '_blank'); }
     function abrirModalBeneficios() { document.getElementById("sndModal").play(); document.getElementById("textoDetalle").innerText = detalleGlobal; document.getElementById("modalBeneficios").style.display = "block"; }
     function cerrarModal(id) { document.getElementById(id).style.display = "none"; }
-    window.onclick = (e) => { if (e.target.className === 'modal') { cerrarModal('modalBeneficios'); cerrarModal('modalCatalogo'); } }
+    
+    // --- NUEVAS FUNCIONES PARA VIBORECHO ---
+    function abrirLobby() {
+      document.getElementById("sndModal").play();
+      document.getElementById("modalLobbyJuego").style.display = "block";
+      document.getElementById("msgJuego").innerText = usuarioActual ? "PLAYER: " + usuarioActual.toUpperCase() : "IDENTIFÍCATE PARA GUARDAR TU SCORE";
+    }
+
+    function cerrarLobby() {
+      stopGame();
+      document.getElementById("modalLobbyJuego").style.display = "none";
+      document.getElementById("btnViborecho").style.display = "block";
+      document.getElementById("game-canvas").style.display = "none";
+      document.getElementById("game-controls").style.display = "none";
+    }
+
+    const canvas = document.getElementById("game-canvas");
+    const ctx = canvas.getContext("2d");
+    let snake, food, direction, gameInterval, score;
+    const box = 20;
+
+    function iniciarViborecho() {
+      document.getElementById("btnViborecho").style.display = "none";
+      document.getElementById("msgJuego").style.display = "none";
+      canvas.style.display = "block";
+      document.getElementById("game-controls").style.display = "grid";
+      resetGame();
+      gameInterval = setInterval(draw, 150);
+    }
+
+    function resetGame() {
+      snake = [{x: 7 * box, y: 7 * box}];
+      food = { x: Math.floor(Math.random() * 14 + 1) * box, y: Math.floor(Math.random() * 14 + 1) * box };
+      direction = "RIGHT";
+      score = 0;
+    }
+
+    function cambiarDir(d) {
+      if(d === "LEFT" && direction !== "RIGHT") direction = "LEFT";
+      if(d === "UP" && direction !== "DOWN") direction = "UP";
+      if(d === "RIGHT" && direction !== "LEFT") direction = "RIGHT";
+      if(d === "DOWN" && direction !== "UP") direction = "DOWN";
+    }
+
+    function draw() {
+      ctx.fillStyle = "black"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      for(let i=0; i<snake.length; i++) {
+        ctx.fillStyle = (i === 0) ? "#00f2ff" : "#0088aa";
+        ctx.fillRect(snake[i].x, snake[i].y, box, box);
+        ctx.strokeStyle = "black"; ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+      }
+      ctx.font = "15px Arial"; ctx.fillText("🍕", food.x, food.y + box);
+      
+      let snakeX = snake[0].x; let snakeY = snake[0].y;
+      if(direction === "LEFT") snakeX -= box;
+      if(direction === "UP") snakeY -= box;
+      if(direction === "RIGHT") snakeX += box;
+      if(direction === "DOWN") snakeY += box;
+
+      if(snakeX === food.x && snakeY === food.y) {
+        score++;
+        food = { x: Math.floor(Math.random() * 14 + 1) * box, y: Math.floor(Math.random() * 14 + 1) * box };
+      } else { snake.pop(); }
+
+      let newHead = {x: snakeX, y: snakeY};
+      if(snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) {
+        clearInterval(gameInterval);
+        alert("GAME OVER! SCORE: " + score);
+        if(usuarioActual) {
+          fetch(`${SCRIPT_URL}?accion=guardarPuntos&nombre=${encodeURIComponent(usuarioActual)}&puntos=${score}&juego=ViborechoFood`);
+        }
+        cerrarLobby();
+      }
+      snake.unshift(newHead);
+    }
+
+    function collision(head, array) {
+      for(let i=0; i<array.length; i++) { if(head.x === array[i].x && head.y === array[i].y) return true; }
+      return false;
+    }
+
+    function stopGame() { clearInterval(gameInterval); }
+
+    document.addEventListener("keydown", e => {
+      if(e.keyCode == 37) cambiarDir("LEFT");
+      if(e.keyCode == 38) cambiarDir("UP");
+      if(e.keyCode == 39) cambiarDir("RIGHT");
+      if(e.keyCode == 40) cambiarDir("DOWN");
+    });
+
+    window.onclick = (e) => { 
+      if (e.target.className === 'modal') { 
+        cerrarModal('modalBeneficios'); 
+        cerrarModal('modalCatalogo'); 
+        cerrarLobby();
+      } 
+    }
   </script>
 </body>
 </html>
